@@ -39,7 +39,7 @@ st.title("O'zbekiston armiyasida ishlatilayotgan qurol turlarini klassifikatsiya
 # Modelni keshlab yuklash
 @st.cache_resource
 def load_my_model():
-    return load_learner('qurol_model.pkl')
+    return load_learner('./qurol_model.pkl')
 
 try:
     model = load_my_model()
