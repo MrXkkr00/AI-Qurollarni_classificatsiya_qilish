@@ -9,16 +9,22 @@ from types import ModuleType
 warnings.filterwarnings("ignore")
 
 # ─────────────────────────────────────────────────────────────────
-# 2. FASTTRANSFORM XATOLIGINI TUZATISH (SOXTA MODUL YARATISH)
+# 2. FASTTRANSFORM.TRANSFORM XATOLIGINI BUTUNLAY TUZATISH
 # ─────────────────────────────────────────────────────────────────
-# Model qidirayotgan 'fasttransform' modulini sun'iy yaratib, 
-# fastai transformatsiyalariga bog'lab qo'yamiz
+# Python tizimida soxta paket va uning ichki modulini yaratamiz
 try:
-    import fastai.vision.augment as augment
-    fasttransform_module = ModuleType('fasttransform')
-    # Agar model ichida maxsus funksiyalar qidirilsa, xato bermasligi uchun bog'laymiz
-    sys.modules['fasttransform'] = fasttransform_module
-except Exception:
+    # Asosiy 'fasttransform' paketi
+    fasttransform = ModuleType('fasttransform')
+    fasttransform.__path__ = []  # Paket ekanligini bildirish uchun path beramiz
+    
+    # Ichidagi 'fasttransform.transform' moduli
+    transform = ModuleType('fasttransform.transform')
+    
+    # Ularni bir-biriga va tizimga bog'laymiz
+    fasttransform.transform = transform
+    sys.modules['fasttransform'] = fasttransform
+    sys.modules['fasttransform.transform'] = transform
+except Exception as e:
     pass
 
 # ─────────────────────────────────────────────────────────────────
@@ -30,7 +36,7 @@ if plt != 'Windows':
 else:
     pathlib.PosixPath = pathlib.WindowsPath
 
-# Kutubxonalarni yuqoridagi sozlamalardan KEYIN yuklaymiz
+# Kutubxonalarni yuqoridagi xavfsizlik choralaridan KEYIN yuklaymiz
 from fastai.vision.all import PILImage, load_learner
 import plotly.express as px
 
@@ -39,7 +45,7 @@ st.title("O'zbekiston armiyasida ishlatilayotgan qurol turlarini klassifikatsiya
 # Modelni keshlab yuklash
 @st.cache_resource
 def load_my_model():
-    return load_learner('./qurol_model.pkl')
+    return load_learner('qurol_model.pkl')
 
 try:
     model = load_my_model()
