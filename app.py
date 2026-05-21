@@ -8,19 +8,26 @@ from types import ModuleType
 # 1. Barcha ogohlantirishlarni o'chirish
 warnings.filterwarnings("ignore")
 
+# Fastai kutubxonasining asl klasslarini oldindan yuklab olamiz
+import fastcore.transform as fastcore_trans
+from fastai.vision.all import PILImage, load_learner
+import plotly.express as px
+
 # ─────────────────────────────────────────────────────────────────
-# 2. FASTTRANSFORM.TRANSFORM XATOLIGINI BUTUNLAY TUZATISH
+# 2. FASTTRANSFORM VA PIPELINE XATOLIGINI TUZATISH
 # ─────────────────────────────────────────────────────────────────
-# Python tizimida soxta paket va uning ichki modulini yaratamiz
 try:
     # Asosiy 'fasttransform' paketi
     fasttransform = ModuleType('fasttransform')
-    fasttransform.__path__ = []  # Paket ekanligini bildirish uchun path beramiz
+    fasttransform.__path__ = []  # Paket ekanligini bildiramiz
     
     # Ichidagi 'fasttransform.transform' moduli
     transform = ModuleType('fasttransform.transform')
     
-    # Ularni bir-biriga va tizimga bog'laymiz
+    # Model qidirayotgan 'Pipeline' klassini fastai/fastcore'ning asl Pipeline'iga tenglaymiz
+    transform.Pipeline = fastcore_trans.Pipeline
+    
+    # Ularni tizim xotirasiga (namespace) majburan joylaymiz
     fasttransform.transform = transform
     sys.modules['fasttransform'] = fasttransform
     sys.modules['fasttransform.transform'] = transform
@@ -35,10 +42,6 @@ if plt != 'Windows':
     pathlib.WindowsPath = pathlib.PosixPath
 else:
     pathlib.PosixPath = pathlib.WindowsPath
-
-# Kutubxonalarni yuqoridagi xavfsizlik choralaridan KEYIN yuklaymiz
-from fastai.vision.all import PILImage, load_learner
-import plotly.express as px
 
 st.title("O'zbekiston armiyasida ishlatilayotgan qurol turlarini klassifikatsiya qiluvchi model")
 
