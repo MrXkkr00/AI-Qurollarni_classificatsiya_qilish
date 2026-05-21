@@ -1,17 +1,17 @@
-import streamlit as st
-from fastai.vision.all import PILImage, load_learner
 import pathlib
-import plotly.express as px
-import warnings
 import platform
-from PIL import Image
 
-
+# Tizim moslashuvi
 plt = platform.system()
 if plt != 'Windows':
     pathlib.WindowsPath = pathlib.PosixPath
 
-
+# Streamlit va qolgan importlar endi pastdan boshlanadi
+import streamlit as st
+import plotly.express as px
+from PIL import Image
+import fastai
+from fastai.vision.all import *
 
 st.title("O'zbekiston armiyasida ishlatilayotgan qurol turlarini klassifikatsiya qiluvchi model")
 
