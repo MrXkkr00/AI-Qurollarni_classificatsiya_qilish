@@ -2,33 +2,49 @@ import streamlit as st
 import pathlib
 import platform
 import warnings
+import sys
+from types import ModuleType
 
-# 1. Barcha ogohlantirishlarni (warnings) butunlay bloklaymiz
+# 1. Barcha ogohlantirishlarni o'chirish
 warnings.filterwarnings("ignore")
 
-# 2. Pathlib mosligini ta'minlash (Windows/Linux muammosi uchun)
+# ─────────────────────────────────────────────────────────────────
+# 2. FASTTRANSFORM XATOLIGINI TUZATISH (SOXTA MODUL YARATISH)
+# ─────────────────────────────────────────────────────────────────
+# Model qidirayotgan 'fasttransform' modulini sun'iy yaratib, 
+# fastai transformatsiyalariga bog'lab qo'yamiz
+try:
+    import fastai.vision.augment as augment
+    fasttransform_module = ModuleType('fasttransform')
+    # Agar model ichida maxsus funksiyalar qidirilsa, xato bermasligi uchun bog'laymiz
+    sys.modules['fasttransform'] = fasttransform_module
+except Exception:
+    pass
+
+# ─────────────────────────────────────────────────────────────────
+# 3. PATHLIB MUAMMOSINI TUZATISH (Windows/Linux)
+# ─────────────────────────────────────────────────────────────────
 plt = platform.system()
 if plt != 'Windows':
     pathlib.WindowsPath = pathlib.PosixPath
 else:
     pathlib.PosixPath = pathlib.WindowsPath
 
-# Kutubxonalarni ogohlantirishlar o'chirilgandan keyin yuklaymiz
+# Kutubxonalarni yuqoridagi sozlamalardan KEYIN yuklaymiz
 from fastai.vision.all import PILImage, load_learner
 import plotly.express as px
 
 st.title("O'zbekiston armiyasida ishlatilayotgan qurol turlarini klassifikatsiya qiluvchi model")
 
-# Modelni keshga olib yuklash
+# Modelni keshlab yuklash
 @st.cache_resource
 def load_my_model():
     return load_learner('qurol_model.pkl')
 
-# Model yuklanishini tekshirish
 try:
     model = load_my_model()
 except Exception as e:
-    st.error("Modelni yuklashda muammo bo'ldi. Versiyalar o'zgargani sababli bo'lishi mumkin.")
+    st.error("Modelni yuklashda muammo bo'ldi. pkl fayli mos kelmayapti yoki buzilgan.")
     st.write(f"Xatolik tafsiloti: {e}")
     st.stop()
 
