@@ -1,1 +1,3 @@
-
+Ini, TOML
+[server]
+pythonVersion = "3.11"
