@@ -8,13 +8,13 @@ from types import ModuleType
 # 1. Barcha ogohlantirishlarni o'chirish
 warnings.filterwarnings("ignore")
 
-# Fastai kutubxonasining asl klasslarini oldindan yuklab olamiz
+# Fastai va fastcore kutubxonasining asl klasslarini oldindan yuklab olamiz
 import fastcore.transform as fastcore_trans
 from fastai.vision.all import PILImage, load_learner
 import plotly.express as px
 
 # ─────────────────────────────────────────────────────────────────
-# 2. FASTTRANSFORM VA PIPELINE XATOLIGINI TUZATISH
+# 2. FASTTRANSFORM, PIPELINE VA TRANSFORM XATOLIKLARINI TUZATISH
 # ─────────────────────────────────────────────────────────────────
 try:
     # Asosiy 'fasttransform' paketi
@@ -24,8 +24,9 @@ try:
     # Ichidagi 'fasttransform.transform' moduli
     transform = ModuleType('fasttransform.transform')
     
-    # Model qidirayotgan 'Pipeline' klassini fastai/fastcore'ning asl Pipeline'iga tenglaymiz
+    # Model qidirayotgan 'Pipeline' va 'Transform' klasslarini asl nusxalariga bog'laymiz
     transform.Pipeline = fastcore_trans.Pipeline
+    transform.Transform = fastcore_trans.Transform
     
     # Ularni tizim xotirasiga (namespace) majburan joylaymiz
     fasttransform.transform = transform
